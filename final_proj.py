@@ -45,8 +45,12 @@ def spatial_analysis():
     arcpy.JoinField_management(schools_file, "SCHOOL_NUM", stores_per_school, "SCHOOL_NUM", "Join_Count")
 
 
-#def make_map():
-        
+def make_map():
+    mxd_path = os.path.join(os.getcwd(), "final'mxd")
+    print(os.getcwd())
 
 [fetch_data(file) for file in zips_to_dl]
+
 spatial_analysis()
+
+make_map()
