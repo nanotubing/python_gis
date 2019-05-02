@@ -33,17 +33,16 @@ def fetch_data(url):
 def spatial_analysis():
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
-    papi_store = "PhillyHealth_Healthy_corner_stores.shp"
-    buffer_file = "PhillyPlanning_Schools.shp"
-    buffer_suffix = buffer_file[:-4] + '_buff.shp'
+    corner_store = "PhillyHealth_Healthy_corner_stores.shp"
+    schools_file = "PhillyPlanning_Schools.shp"
+    schools_buff = schools_file[:-4] + '_buff.shp'
     buffer_dist = "300 Meters"
 
-    arcpy.Buffer_analysis(buffer_file, buffer_suffix, buffer_dist)
+    arcpy.Buffer_analysis(schools_file, schools_buff, buffer_dist)
     stores_per_school = "Healthy_stores_per_school.shp"
-    arcpy.SpatialJoin_analysis(buffer_suffix, papi_store, stores_per_school,\
+    arcpy.SpatialJoin_analysis(schools_buff, corner_store, stores_per_school,\
                                "JOIN_ONE_TO_ONE", "KEEP_ALL", "", "COMPLETELY_CONTAINS")
-    arcpy.JoinField_management(inFeatures, joinField, joinTable, joinField, 
-                           fieldList)
+    arcpy.JoinField_management(corner_store, "SCHOOL_NUM", stores_per_school, "SCHOOL_NUM", "Join_Count")
 
 
 #def make_map():
