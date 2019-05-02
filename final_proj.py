@@ -42,7 +42,7 @@ def spatial_analysis():
     stores_per_school = "Healthy_stores_per_school.shp"
     arcpy.SpatialJoin_analysis(schools_buff, corner_store, stores_per_school,\
                                "JOIN_ONE_TO_ONE", "KEEP_ALL", "", "COMPLETELY_CONTAINS")
-    arcpy.JoinField_management(corner_store, "SCHOOL_NUM", stores_per_school, "SCHOOL_NUM", "Join_Count")
+    arcpy.JoinField_management(schools_file, "SCHOOL_NUM", stores_per_school, "SCHOOL_NUM", "Join_Count")
 
 
 #def make_map():
