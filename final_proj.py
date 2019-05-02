@@ -37,8 +37,7 @@ def spatial_analysis():
     buffer_file = "PhillyPlanning_Schools.shp"
     buffer_suffix = buffer_file[:-4] + '_buff.shp'
     buffer_dist = "300 Meters"
-#    print(buffer_file)
-#    print(buffer_suffix)
+
     arcpy.Buffer_analysis(buffer_file, buffer_suffix, buffer_dist)
     stores_per_school = "Healthy_stores_per_school.shp"
     arcpy.SpatialJoin_analysis(buffer_suffix, papi_store, stores_per_school,\
