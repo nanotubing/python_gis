@@ -46,8 +46,18 @@ def spatial_analysis():
 
 
 def make_map():
-    mxd_path = os.path.join(os.getcwd(), "final'mxd")
-    print(os.getcwd())
+    neighborhoods_shp = "PhillyPlanning_Neighborhoods.shp"
+    mxd_path = os.path.join(os.getcwd(), "final.mxd")
+    output_pdf_name = "Healthy_Stores_PerSchool.pdf"
+    print(mxd_path)
+    mxd = arcpy.mapping.MapDocument(mxd_path)
+    data_frames = arcpy.mapping.ListDataFrames(mxd)
+    data_frame = data_frames[0]
+    
+    arcpy.mapping.AddLayer(data_frame, neighborhoods_shp, "BOTTOM" )
+    
+    #export to PDF
+    arcpy.mapping.ExportToPDF(mxd, "output_pdf_name")
 
 [fetch_data(file) for file in zips_to_dl]
 
