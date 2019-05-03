@@ -2,7 +2,7 @@
 """
 Created on Thu May  2 14:03:12 2019
 
-@author: tuj53509
+@author: Claude M. Schrader
 """
 from __future__ import absolute_import, division, print_function
 
@@ -62,10 +62,12 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighbor
     layer0 = arcpy.mapping.Layer(neighborhoods_loc)
     layer1 = arcpy.mapping.Layer(schools_file_full_loc)
     arcpy.ApplySymbologyFromLayer_management(layer1, lyr_path)
-    
     arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
     arcpy.mapping.AddLayer(data_frame, layer1, "TOP")
-        
+    
+    elements = arcpy.mapping.ListLayoutElements(mxd)
+    print(elements[])
+    
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
 
