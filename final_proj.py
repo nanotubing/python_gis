@@ -33,21 +33,18 @@ def fetch_data(url, dl_dir):
     with zipfile.ZipFile(out_file_name, 'r') as zipObj:
         zipObj.extractall(dl_dir)
 
-def spatial_analysis(dl_dir):
+def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
+                     stores_per_school_loc):
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
     
-    corner_store = os.path.join(dl_dir, "PhillyHealth_Healthy_corner_stores.shp")
-    schools_file_basename = "PhillyPlanning_Schools.shp"
-    schools_file_full = os.path.join(dl_dir, schools_file_basename)
-    schools_buff = schools_file_basename[:-4] + "_buff.shp"
     buffer_dist = "300 Meters"
 
-    arcpy.Buffer_analysis(schools_file_full, schools_buff, buffer_dist)
-    stores_per_school = "Healthy_stores_per_school.shp"
-    arcpy.SpatialJoin_analysis(schools_buff, corner_store, stores_per_school,\
+    arcpy.Buffer_analysis(schools_file_full_loc, schools_buff_loc, buffer_dist)
+    arcpy.SpatialJoin_analysis(schools_buff_loc, corner_store_loc, stores_per_school_loc,\
                                "JOIN_ONE_TO_ONE", "KEEP_ALL", "", "COMPLETELY_CONTAINS")
-    arcpy.JoinField_management(schools_file_full, "SCHOOL_NUM", stores_per_school, "SCHOOL_NUM", "Join_Count")
+    arcpy.JoinField_management(schools_file_full_loc, "SCHOOL_NUM", stores_per_school_loc,\
+                               "SCHOOL_NUM", "Join_Count")
 
 
 def make_map(dl_dir, rootpath):
@@ -69,8 +66,15 @@ def make_map(dl_dir, rootpath):
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
 
+
+corner_store = os.path.join(downloads_dir, "PhillyHealth_Healthy_corner_stores.shp")
+schools_file_basename = "PhillyPlanning_Schools.shp"
+schools_file_full = os.path.join(downloads_dir, schools_file_basename)
+schools_buff = schools_file_basename[:-4] + "_buff.shp"
+stores_per_school = "Healthy_stores_per_school.shp"
+
 [fetch_data(file, downloads_dir) for file in zips_to_dl]
 
-spatial_analysis(downloads_dir)
+spatial_analysis(schools_file_full, schools_buff, corner_store, stores_per_school )
 
 make_map(downloads_dir, newpath)
