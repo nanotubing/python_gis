@@ -48,13 +48,13 @@ def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
                                "SCHOOL_NUM", "Join_Count")
 
 
-def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighborhoods_loc):
+def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_layer_loc, neighborhoods_loc):
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
     
     
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
-    lyr_path = os.path.join(os.getcwd(), "PhillyPlanning_Schools.lyr")
+#    lyr_path = os.path.join(os.getcwd(), "PhillyPlanning_Schools.lyr")
     output_pdf_name = "Healthy_Stores.pdf"
     
     mxd = arcpy.mapping.MapDocument(mxd_path)
@@ -63,7 +63,7 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighbor
 
     layer0 = arcpy.mapping.Layer(neighborhoods_loc)
     layer1 = arcpy.mapping.Layer(schools_file_full_loc)
-    arcpy.ApplySymbologyFromLayer_management(layer1, lyr_path)
+    arcpy.ApplySymbologyFromLayer_management(layer1, schools_layer_loc)
     arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
     arcpy.mapping.AddLayer(data_frame, layer1, "TOP")
     
@@ -74,6 +74,7 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighbor
 corner_store = os.path.join(downloads_dir, "PhillyHealth_Healthy_corner_stores.shp")
 schools_file_basename = "PhillyPlanning_Schools.shp"
 schools_file_full = os.path.join(downloads_dir, schools_file_basename)
+schools_layer = os.path.join(downloads_dir, "PhillyPlanning_Schools.lyr")
 schools_buff = schools_file_basename[:-4] + "_buff.shp"
 stores_per_school = "Healthy_stores_per_school.shp"
 neighborhoods = os.path.join(downloads_dir, "PhillyPlanning_Neighborhoods.shp")
@@ -82,4 +83,4 @@ neighborhoods = os.path.join(downloads_dir, "PhillyPlanning_Neighborhoods.shp")
 
 spatial_analysis(schools_file_full, schools_buff, corner_store, stores_per_school )
 
-make_map(downloads_dir, newpath, schools_buff, schools_file_full, neighborhoods)
+make_map(downloads_dir, newpath, schools_buff, schools_file_full, schools_layer, neighborhoods)
