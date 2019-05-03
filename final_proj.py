@@ -47,24 +47,27 @@ def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
                                "SCHOOL_NUM", "Join_Count")
 
 
-def make_map(dl_dir, rootpath, schools_file_full_loc, neighborhoods_loc):
+def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighborhoods_loc):
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
     
     
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
     output_pdf_name = "Healthy_Stores.pdf"
-    layer_list = [schools_file_full_loc, neighborhoods_loc]
+#    layer_list = [schools_buff_loc, schools_file_full_loc, neighborhoods_loc]
     
     mxd = arcpy.mapping.MapDocument(mxd_path)
     data_frames = arcpy.mapping.ListDataFrames(mxd)
     data_frame = data_frames[0]
     
-    
-    for file in layer_list:
-        layer = arcpy.mapping.Layer(file)
-        arcpy.mapping.AddLayer(data_frame, layer)
-    
+    layer0 = arcpy.mapping.Layer(neighborhoods_loc)
+    arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
+#    layer1 = arcpy.mapping.Layer(schools_buff_loc)
+#    arcpy.mapping.AddLayer(data_frame, layer1)
+    layer2 = arcpy.mapping.Layer(schools_file_full_loc)
+    arcpy.mapping.AddLayer(data_frame, layer2, "TOP")
+
+        
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
 
@@ -80,4 +83,4 @@ neighborhoods = os.path.join(downloads_dir, "PhillyPlanning_Neighborhoods.shp")
 
 spatial_analysis(schools_file_full, schools_buff, corner_store, stores_per_school )
 
-make_map(downloads_dir, newpath, schools_file_full, neighborhoods)
+make_map(downloads_dir, newpath, schools_buff, schools_file_full, neighborhoods)
