@@ -21,7 +21,6 @@ if not os.path.exists(newpath):
 if not os.path.exists(downloads_dir):
     os.makedirs(downloads_dir)
 
-
 def fetch_data(url, dl_dir):
     download_url = urllib2.urlopen(url)
     zip_contents = download_url.read()
@@ -53,20 +52,19 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighbor
     
     
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
+    lyr_path = os.path.join(os.getcwd(), "PhillyPlanning_Schools.lyr")
     output_pdf_name = "Healthy_Stores.pdf"
-#    layer_list = [schools_buff_loc, schools_file_full_loc, neighborhoods_loc]
     
     mxd = arcpy.mapping.MapDocument(mxd_path)
     data_frames = arcpy.mapping.ListDataFrames(mxd)
     data_frame = data_frames[0]
-    
-    layer0 = arcpy.mapping.Layer(neighborhoods_loc)
-    arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
-#    layer1 = arcpy.mapping.Layer(schools_buff_loc)
-#    arcpy.mapping.AddLayer(data_frame, layer1)
-    layer2 = arcpy.mapping.Layer(schools_file_full_loc)
-    arcpy.mapping.AddLayer(data_frame, layer2, "TOP")
 
+    layer0 = arcpy.mapping.Layer(neighborhoods_loc)
+    layer1 = arcpy.mapping.Layer(schools_file_full_loc)
+    arcpy.ApplySymbologyFromLayer_management(layer1, lyr_path)
+    
+    arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
+    arcpy.mapping.AddLayer(data_frame, layer1, "TOP")
         
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
