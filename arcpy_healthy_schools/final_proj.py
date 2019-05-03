@@ -6,7 +6,7 @@ Created on Thu May  2 14:03:12 2019
 """
 from __future__ import absolute_import, division, print_function
 
-import arcpy, os, urllib2, zipfile
+import arcpy, os, glob, urllib2, zipfile
 
 documents_dir = os.path.expanduser("~\Documents")
 newdir = "final_project_cschrader"
@@ -14,7 +14,8 @@ newpath = os.path.join(documents_dir, newdir)
 downloads_dir = os.path.join(newpath, "data")
 zips_to_dl = ["ftp://ftp.pasda.psu.edu/pub/pasda/philacity/data/PhillyHealth_Healthy_corner_stores.zip",\
               "ftp://ftp.pasda.psu.edu/pub/pasda/philacity/data/PhillyPlanning_Schools.zip",\
-              "ftp://ftp.pasda.psu.edu/pub/pasda/philacity/data/PhillyPlanning_Neighborhoods.zip"]
+              "ftp://ftp.pasda.psu.edu/pub/pasda/philacity/data/PhillyPlanning_Neighborhoods.zip",\
+              "https://github.com/nanotubing/python_gis/raw/master/arcpy_healthy_schools/PhillyPlanning_Schools.lyr"]
 
 if not os.path.exists(newpath):
     os.makedirs(newpath)
@@ -28,9 +29,10 @@ def fetch_data(url, dl_dir):
     out_file_name = os.path.join(dl_dir, os.path.basename(url))
     with open(out_file_name, 'wb') as outf:
         outf.write(zip_contents)
-        
-    with zipfile.ZipFile(out_file_name, 'r') as zipObj:
-        zipObj.extractall(dl_dir)
+    
+    if(out_file_name[-4:]) == ".zip":
+        with zipfile.ZipFile(out_file_name, 'r') as zipObj:
+            zipObj.extractall(dl_dir)
 
 def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
                      stores_per_school_loc):
