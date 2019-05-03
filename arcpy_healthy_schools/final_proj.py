@@ -54,7 +54,6 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_
     
     
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
-#    lyr_path = os.path.join(os.getcwd(), "PhillyPlanning_Schools.lyr")
     output_pdf_name = "Healthy_Stores.pdf"
     
     mxd = arcpy.mapping.MapDocument(mxd_path)
