@@ -65,9 +65,6 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, neighbor
     arcpy.mapping.AddLayer(data_frame, layer0, "BOTTOM")
     arcpy.mapping.AddLayer(data_frame, layer1, "TOP")
     
-    elements = arcpy.mapping.ListLayoutElements(mxd)
-    print(elements[])
-    
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
 
