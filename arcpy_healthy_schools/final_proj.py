@@ -54,7 +54,7 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_
     
     
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
-    output_pdf_name = "Healthy_Stores.pdf"
+    output_pdf_name = "Healthy_Stores_per_School.pdf"
     
     mxd = arcpy.mapping.MapDocument(mxd_path)
     data_frames = arcpy.mapping.ListDataFrames(mxd)
@@ -68,6 +68,8 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_
     
     #export to PDF
     arcpy.mapping.ExportToPDF(mxd, os.path.join(rootpath, output_pdf_name))
+    
+    mxd.saveACopy(os.path.join(rootpath, "Healthy_Stores_per_School.mxd"))
 
 
 corner_store = os.path.join(downloads_dir, "PhillyHealth_Healthy_corner_stores.shp")
@@ -83,3 +85,4 @@ neighborhoods = os.path.join(downloads_dir, "PhillyPlanning_Neighborhoods.shp")
 spatial_analysis(schools_file_full, schools_buff, corner_store, stores_per_school )
 
 make_map(downloads_dir, newpath, schools_buff, schools_file_full, schools_layer, neighborhoods)
+
