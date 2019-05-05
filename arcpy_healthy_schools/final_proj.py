@@ -6,7 +6,11 @@ Created on Thu May  2 14:03:12 2019
 from __future__ import absolute_import, division, print_function
 
 #import everything we need
-import arcpy, os, urllib2, zipfile
+import os
+
+import arcpy
+import urllib2
+import zipfile
 
 #get the path of the documents directory and build paths to create
 documents_dir = os.path.expanduser("~\Documents")
@@ -26,9 +30,11 @@ if not os.path.exists(newpath):
 if not os.path.exists(downloads_dir):
     os.makedirs(downloads_dir)
 
-#function to download and unzip if necessary
-#returns nothing
+
 def fetch_data(url, dl_dir):
+    """function to download and unzip if necessary
+    returns nothing    
+    """
     download_url = urllib2.urlopen(url)
     zip_contents = download_url.read()
     download_url.close()
@@ -41,10 +47,12 @@ def fetch_data(url, dl_dir):
         with zipfile.ZipFile(out_file_name, 'r') as zipObj:
             zipObj.extractall(dl_dir)
 
-#function that performs all the spatial analysis
-#returns nothing
+
 def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
                      stores_per_school_loc):
+    """function that performs all the spatial analysis
+    returns nothing
+    """
     #set up basic arc options
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
@@ -60,13 +68,15 @@ def spatial_analysis(schools_file_full_loc, schools_buff_loc, corner_store_loc,\
     arcpy.JoinField_management(schools_file_full_loc, "SCHOOL_NUM", stores_per_school_loc,\
                                "SCHOOL_NUM", "Join_Count")
 
-#create our map using the arc mapping module
-#returns nothing
-def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_layer_loc, neighborhoods_loc):
+
+def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc,\
+             schools_layer_loc, neighborhoods_loc):
+    """create our map using the arc mapping module
+    returns nothing
+    """
     #set up basic arc options
     arcpy.env.workspace = newpath
     arcpy.env.overwriteOutput = True
-    
     #initial mxd template we use
     mxd_path = os.path.join(os.getcwd(), "final.mxd")
     #name of PDF map we create
@@ -94,6 +104,7 @@ def make_map(dl_dir, rootpath, schools_buff_loc, schools_file_full_loc, schools_
     #also save out the modified mxd document for some manual prettying up
     mxd.saveACopy(os.path.join(rootpath, "Healthy_Stores_per_School.mxd"))
 
+
 #path to the healthy corner stores shapefile
 corner_store = os.path.join(downloads_dir, "PhillyHealth_Healthy_corner_stores.shp")
 #set up files and paths for the schools shape file and buffer output file
@@ -108,10 +119,13 @@ stores_per_school = "Healthy_stores_per_school.shp"
 # philadelphia neighborhoods basemap
 neighborhoods = os.path.join(downloads_dir, "PhillyPlanning_Neighborhoods.shp")
 
+#now lets actually run the functions
 #list comprehension running the fetch_data( ) function for each item in zips_to_dl
 [fetch_data(file, downloads_dir) for file in zips_to_dl]
+
 #run the spatial_analysis() function and pass in all necessary data as args
 spatial_analysis(schools_file_full, schools_buff, corner_store, stores_per_school )
+
 #make our actual map and output PDF and modified MXD files
 make_map(downloads_dir, newpath, schools_buff, schools_file_full, schools_layer, neighborhoods)
 
