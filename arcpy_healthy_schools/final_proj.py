@@ -5,8 +5,8 @@ Created on Thu May  2 14:03:12 2019
 @author: Claude M. Schrader
 """
 from __future__ import absolute_import, division, print_function
-
-import arcpy, os, glob, urllib2, zipfile
+#import everything we need
+import arcpy, os, urllib2, zipfile
 
 documents_dir = os.path.expanduser("~\Documents")
 newdir = "final_project_cschrader"
