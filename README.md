@@ -6,3 +6,5 @@ This script downloads a few shape files from [PASDA](http://www.pasda.psu.edu) a
 It then performs a spatial analyis, calculating the number of healthy corner stores within 300 Meters of 
 each school in Philadelphia, and creates a map based on that data. The visualization was limited pretty 
 heavily by arcpy's mapping capabilities.  
+
+A more thorough explanation of this script can be found on my [personal site](https://claudeschrader.com/python-arcpy-module/)
